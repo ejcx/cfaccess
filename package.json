@@ -12,6 +12,9 @@
     "access",
     "jwt"
   ],
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "ava"
   },
