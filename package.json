@@ -1,6 +1,6 @@
 {
   "name": "cfaccess",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Easily verify JWTs associated with Cloudflare Access",
   "license": "MIT",
   "repository": "ejcx/cfaccess",
