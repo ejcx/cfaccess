@@ -8,7 +8,7 @@ async function Verify(tok, aud, accessDomain, kids) {
   const client = jwksClient({
     jwksUri: accessDomain + '/cdn-cgi/access/certs'
   });
-  var keys = await getKeys(client);
+  var keys = await getKeys(client, kids);
 
   opts = {
     audience: aud,
@@ -23,7 +23,7 @@ async function Verify(tok, aud, accessDomain, kids) {
   return false;
 }
 
-async function getKeys(client){
+async function getKeys(client, kids){
   var getSigningKeyAsync = promisify(client.getSigningKey)
   var keys = [];
   for (var i=0;i<kids.length;i++) {
@@ -34,4 +34,3 @@ async function getKeys(client){
 }
 
 module.exports = Verify;
-
