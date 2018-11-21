@@ -1,36 +1,30 @@
-var promisify = require("promisify-node");
-var jwksClient = promisify("jwks-rsa");
-var jwt = promisify("jsonwebtoken");
+'use strict';
+const promisify = require('util').promisify;
+const jwt = require('jsonwebtoken');
+const jwksClient = require('jwks-rsa');
+const pLocate = require('p-locate');
 
-var verifyAsync = promisify(jwt.verify);
+const jwtVerify = promisify(jwt.verify);
 
-async function Verify(tok, aud, accessDomain, kids) {
-  const client = jwksClient({
-    jwksUri: accessDomain + "/cdn-cgi/access/certs"
-  });
-  var keys = await getKeys(client, kids);
+async function verify(token, audience, issuer, kids) {
+  let client = jwksClient({ jwksUri: `${issuer}/cdn-cgi/access/certs` });
+  let getSigningKey = promisify(client.getSigningKey);
 
-  opts = {
-    audience: aud,
-    issuer: accessDomain
-  };
-  for (var i = 0; i < keys.length; i++) {
+  let decoded = await pLocate(kids, async kid => {
+    let res = await getSigningKey(kid);
+    let key = res.publicKey || res.rsaPublicKey;
     try {
-      var dec = await verifyAsync(tok, keys[i], opts);
-      return dec;
-    } catch (err) {}
-  }
-  return false;
+      return await jwtVerify(token, key, { audience, issuer });
+    } catch (err) {
+      if (/invalid signature/.test(err.message)) {
+        return false;
+      } else {
+        throw err;
+      }
+    }
+  }, { preserveOrder: false });
+
+  return decoded || false;
 }
 
-async function getKeys(client, kids) {
-  var getSigningKeyAsync = promisify(client.getSigningKey);
-  var keys = [];
-  for (var i = 0; i < kids.length; i++) {
-    var key = await getSigningKeyAsync(kids[i]);
-    keys.push(key.publicKey || key.rsaPublicKey);
-  }
-  return keys;
-}
-
-module.exports = Verify;
+module.exports = verify;
