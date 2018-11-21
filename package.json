@@ -5,7 +5,7 @@
     "promisify-node": "^0.5.0"
   },
   "name": "cfaccess",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Easily verify JWTs associated with Cloudflare Access",
   "main": "index.js",
   "devDependencies": {},
