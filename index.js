@@ -1,7 +1,7 @@
 'use strict';
 const promisify = require('util').promisify;
 const jwt = require('jsonwebtoken');
-const jwksClient = require('jwks-rsa');
+const jwksClient = require('jwks-rsa-browser');
 const pLocate = require('p-locate');
 
 const jwtVerify = promisify(jwt.verify);
