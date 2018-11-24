@@ -1,6 +1,6 @@
 {
   "name": "cfaccess",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Easily verify JWTs associated with Cloudflare Access",
   "license": "MIT",
   "repository": "ejcx/cfaccess",
@@ -19,8 +19,9 @@
     "test": "ava"
   },
   "dependencies": {
+    "browser-request": "^0.3.3",
     "jsonwebtoken": "^8.4.0",
-    "jwks-rsa": "^1.3.0",
+    "jwks-rsa-browser": "^1.3.2",
     "p-locate": "^3.0.0"
   },
   "devDependencies": {
